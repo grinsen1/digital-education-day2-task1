@@ -483,27 +483,122 @@ function changeQuantity(platformId, delta) {
 }
 
 function updateRowDisplay(platformId) {
+    console.log('=== updateRowDisplay START ===');
+    console.log('🔍 Ищем платформу с ID:', platformId);
+    console.log('📦 budgetData содержит:', gameState.budgetData.length, 'платформ');
+    console.log('📦 Все ID в budgetData:', gameState.budgetData.map(p => p.id));
+    
     const platform = gameState.budgetData.find(p => p.id === platformId);
+    if (!platform) {
+        console.error('❌ Platform не найден в budgetData для ID:', platformId);
+        console.log('📦 Доступные платформы:', gameState.budgetData.map(p => ({id: p.id, site: p.site})));
+        return;
+    }
+    console.log('✅ Platform найден:', {
+        id: platform.id,
+        site: platform.site,
+        current_quantity: platform.current_quantity,
+        cost_per_unit: platform.cost_per_unit
+    });
+    
+    console.log('🔍 Ищем строку в DOM с data-platform-id:', platformId);
     const row = document.querySelector(`tr[data-platform-id="${platformId}"]`);
-    if (!platform || !row) return;
+    if (!row) {
+        console.error('❌ Строка не найдена в DOM для platformId:', platformId);
+        console.log('🌐 Все строки в DOM:', 
+            Array.from(document.querySelectorAll('tr[data-platform-id]'))
+                .map(r => r.dataset.platformId));
+        return;
+    }
+    console.log('✅ Строка найдена:', row);
+    
     const quantityInput = row.querySelector('.quantity-input');
+    console.log('🔍 Поиск quantity-input:', quantityInput ? '✅ найден' : '❌ не найден');
+    
     const totalCostDisplay = row.querySelector('td.total-cost-col');
+    console.log('🔍 Поиск td.total-cost-col:', totalCostDisplay ? '✅ найден' : '❌ не найден');
+    if (!totalCostDisplay) {
+        console.error('❌ td.total-cost-col не найден!');
+        console.log('📄 HTML содержимое строки:', row.innerHTML);
+        console.log('📄 Все td в строке:', Array.from(row.querySelectorAll('td')).map(td => td.className));
+        return;
+    }
+    
     const decreaseBtn = row.querySelector('[data-action="decrease"]');
     const increaseBtn = row.querySelector('[data-action="increase"]');
+    console.log('🔍 Кнопки:', {
+        decrease: decreaseBtn ? '✅ найдена' : '❌ не найдена',
+        increase: increaseBtn ? '✅ найдена' : '❌ не найдена'
+    });
+    
+    // Обновляем quantity input
     if (quantityInput) {
+        const oldValue = quantityInput.value;
         quantityInput.value = platform.current_quantity ?? 0;
+        console.log('📝 Quantity input обновлен:', oldValue, '->', quantityInput.value);
     }
+    
+    // Обновляем общую стоимость  
     if (totalCostDisplay) {
         const totalCost = (platform.current_quantity ?? 0) * (platform.cost_per_unit ?? 0);
-        totalCostDisplay.textContent = totalCost.toLocaleString() + ' ₽';
+        const newText = totalCost.toLocaleString() + ' ₽';
+        const oldText = totalCostDisplay.textContent;
+        
+        console.log('💰 РАСЧЕТ ОБЩЕЙ СТОИМОСТИ:');
+        console.log('   current_quantity:', platform.current_quantity);
+        console.log('   cost_per_unit:', platform.cost_per_unit);
+        console.log('   totalCost:', totalCost);
+        console.log('   oldText:', oldText);
+        console.log('   newText:', newText);
+        
+        totalCostDisplay.textContent = newText;
+        
+        // Проверяем, что изменение применилось
+        const actualText = totalCostDisplay.textContent;
+        console.log('✅ Текст после обновления:', actualText);
+        
+        if (actualText !== newText) {
+            console.error('❌ ОШИБКА: Текст не обновился! Ожидали:', newText, 'Получили:', actualText);
+            
+            // Попробуем альтернативные способы обновления
+            console.log('🔄 Пробуем альтернативные методы обновления...');
+            
+            // Метод 1: innerHTML
+            totalCostDisplay.innerHTML = newText;
+            console.log('📝 Метод innerHTML:', totalCostDisplay.textContent);
+            
+            // Метод 2: innerText  
+            totalCostDisplay.innerText = newText;
+            console.log('📝 Метод innerText:', totalCostDisplay.textContent);
+            
+            // Метод 3: setAttribute + force reflow
+            totalCostDisplay.setAttribute('data-cost', newText);
+            totalCostDisplay.style.display = 'none';
+            totalCostDisplay.offsetHeight; // force reflow
+            totalCostDisplay.style.display = '';
+            totalCostDisplay.textContent = newText;
+            console.log('📝 Метод force reflow:', totalCostDisplay.textContent);
+        } else {
+            console.log('🎉 УСПЕХ: Общая стоимость обновлена корректно!');
+        }
     }
+    
+    // Обновляем кнопки
     if (decreaseBtn) {
-        decreaseBtn.disabled = (platform.current_quantity ?? 0) === 0;
+        const shouldDisable = (platform.current_quantity ?? 0) === 0;
+        decreaseBtn.disabled = shouldDisable;
+        console.log('⬇️ Decrease button disabled:', shouldDisable);
     }
+    
     if (increaseBtn) {
-        increaseBtn.disabled = (platform.current_quantity ?? 0) >= (platform.max_capacity ?? 0);
+        const shouldDisable = (platform.current_quantity ?? 0) >= (platform.max_capacity ?? 0);
+        increaseBtn.disabled = shouldDisable;
+        console.log('⬆️ Increase button disabled:', shouldDisable);
     }
+    
+    console.log('=== updateRowDisplay END ===');
 }
+
 
 function updateBudgetDisplay() {
     gameState.totalBudget = gameState.budgetData.reduce((sum, platform) =>
