@@ -1,118 +1,235 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тренажер по медиапланированию</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тренажер по медиапланированию</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <div id="welcome-screen" class="screen active">
-        <div class="welcome-card">
-            <h1>Тренажер по медиапланированию</h1>
-            <button id="start-game">Начать работу с медиапланом</button>
+    <div class="container">
+        <!-- Экран приветствия -->
+        <div id="welcome-screen" class="screen active">
+            <div class="welcome-card">
+                <h1>🎯 Тренажер по медиапланированию</h1>
+                <p>Создайте эффективный медиаплан на основе реальных данных!</p>
+                <div class="campaign-info">
+                    <h3>Информация о кампании</h3>
+                    <div class="info-grid">
+                        <div class="info-item"><span class="info-label">Продукт:</span><span class="info-value">Монитор для компьютера</span></div>
+                        <div class="info-item"><span class="info-label">Цена продукта:</span><span class="info-value">14,999 руб.</span></div>
+                        <div class="info-item"><span class="info-label">Бюджет:</span><span class="info-value">2,000,000 руб.</span></div>
+                        <div class="info-item"><span class="info-label">Цель:</span><span class="info-value">Анонсировать новый монитор, максимальный охват</span></div>
+                    </div>
+                </div>
+                <div class="steps-preview">
+                    <div class="step-preview">
+                        <div class="step-number">1</div>
+                        <div class="step-info">
+                            <h3>Отбор площадок</h3>
+                            <p>Изучите полную таблицу медиаплана и выберите подходящие площадки</p>
+                        </div>
+                    </div>
+                    <div class="step-preview">
+                        <div class="step-number">2</div>
+                        <div class="step-info">
+                            <h3>Балансировка бюджета</h3>
+                            <p>Настройте объемы в рамках бюджета 2 млн руб с live-панелью KPI</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn--primary btn--lg" id="start-game">Начать работу с медиапланом</button>
+            </div>
+        </div>
+
+        <!-- Этап 1: Отбор площадок -->
+        <div id="step1-screen" class="screen">
+            <div class="progress-bar">
+                <div class="progress-step active">
+                    <div class="step-circle">1</div><span>Отбор площадок</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step">
+                    <div class="step-circle">2</div><span>Балансировка</span>
+                </div>
+            </div>
+            <div class="step-header">
+                <h2>Этап 1: Отбор площадок</h2>
+                <p>Изучите таблицу с ключевыми KPI и выберите площадки, которые подходят для кампании. Попытка <span id="attempts-counter">1</span></p>
+            </div>
+            <div class="mediaplan-table-container">
+                <div class="table-header">
+                    <h3>📊 Полная таблица медиаплана (по реальным полям)</h3>
+                    <p>Выберите площадки, используя чекбоксы. Наведите на строку — появится tooltip обратной связи.</p>
+                </div>
+                <div class="table-wrapper">
+                    <table class="mediaplan-table" id="mediaplan-table">
+                        <thead>
+                            <tr>
+                                <th class="checkbox-col sticky-col">✓</th>
+                                <th class="number-col">№</th>
+                                <th class="site-col">Сайт</th>
+                                <th class="age-col">Возраст</th>
+                                <th class="segments-col">Сегменты и интересы</th>
+                                <th class="format-col">Формат</th>
+                                <th class="placement-col">Пример размещения</th>
+                                <th class="unit-col">Единица закупки</th>
+                                <th class="capacity-col">Макс. ёмкость</th>
+                                <th class="cost-col">Стоимость за ед.</th>
+                                <th class="budget-col">Бюджет</th>
+                                <th class="shows-col">Показы</th>
+                                <th class="frequency-col">Частота</th>
+                                <th class="cpm-col">CPM</th>
+                                <th class="reach-col">Охват</th>
+                                <th class="cpt-col">CPT</th>
+                                <th class="ctr-col">CTR</th>
+                                <th class="clicks-col">Клики</th>
+                                <th class="cpc-col">CPC</th>
+                                <th class="views-col">Просмотры</th>
+                                <th class="vtr-col">VTR</th>
+                                <th class="cpv-col">CPV</th>
+                                <th class="conversions-session-col">Конв. в сесс.</th>
+                                <th class="sessions-col">Сессии</th>
+                                <th class="cr-successful-col">CR в успех</th>
+                                <th class="conversions-successful-col">Конв. успех</th>
+                                <th class="cpa-successful-col">CPA успех</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mediaplan-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="step-actions">
+                <div class="selection-summary">
+                    <span id="selection-count">Выбрано площадок: 0</span>
+                </div>
+                <button class="btn btn--primary btn--lg" id="complete-step1" disabled>
+                    Отбор площадок закончен
+                </button>
+            </div>
+            <div id="feedback-section" class="feedback-section hidden">
+                <h3>🎯 Обратная связь по выбранным площадкам</h3>
+                <div id="feedback-results"></div>
+                <div class="feedback-actions">
+                    <button class="btn btn--primary" id="continue-to-step2" style="display:none;">Перейти к этапу 2</button>
+                    <button class="btn btn--outline" id="try-again">Попробовать снова</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Этап 2: Балансировка бюджета -->
+        <div id="step2-screen" class="screen">
+            <div class="progress-bar">
+                <div class="progress-step completed">
+                    <div class="step-circle">✓</div><span>Отбор площадок</span>
+                </div>
+                <div class="progress-line completed"></div>
+                <div class="progress-step active">
+                    <div class="step-circle">2</div><span>Балансировка</span>
+                </div>
+            </div>
+            <div class="step-header">
+                <h2>Этап 2: Балансировка бюджета</h2>
+                <p>Настройте объемы закупки для правильно выбранных площадок в рамках бюджета <strong>2 000 000 руб</strong></p>
+            </div>
+            <div class="budget-overview">
+                <div class="budget-card">
+                    <h3>Текущий бюджет</h3>
+                    <div class="budget-amount" id="current-budget">0 ₽</div>
+                    <div class="budget-limit">Лимит: 2 000 000 ₽</div>
+                    <div class="budget-progress">
+                        <div class="progress-bar-budget">
+                            <div class="progress-fill" id="budget-progress-fill"></div>
+                        </div>
+                        <span id="budget-percentage">0%</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <h3>Общий охват</h3>
+                    <div class="kpi-amount" id="current-reach">0</div>
+                    <div class="kpi-description">Прогнозируемый охват</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>Прогнозируемые конверсии</h3>
+                    <div class="kpi-amount" id="total-conversions">0</div>
+                    <div class="kpi-description">Ожидаемое количество</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>CPA</h3>
+                    <div class="kpi-amount" id="current-cpa">0 ₽</div>
+                    <div class="kpi-description">Стоимость конверсии</div>
+                </div>
+            </div>
+            <div class="budget-table-container">
+                <div class="table-header">
+                    <h3>📈 Балансировка: количество и KPI</h3>
+                    <p>Используйте стрелки для изменения количества. Итоги считаются автоматически.</p>
+                </div>
+                <div class="table-wrapper">
+                    <table class="budget-table" id="budget-table">
+                        <thead>
+                            <tr>
+                                <th class="checkbox-col sticky-col">✓</th>
+                                <th class="number-col">№</th>
+                                <th class="site-col">Сайт</th>
+                                <th class="age-col">Возраст</th>
+                                <th class="segments-col">Сегменты и интересы</th>
+                                <th class="format-col">Формат</th>
+                                <th class="placement-col">Пример размещения</th>
+                                <th class="unit-col">Единица закупки</th>
+                                <th class="capacity-col">Макс. ёмкость</th>
+                                <th class="quantity-col">Берём в МП</th>
+                                <th class="cost-col">Стоимость за ед.</th>
+                                <th class="total-cost-col">Общая стоимость</th>
+                                <th class="budget-col">Бюджет</th>
+                                <th class="shows-col">Показы</th>
+                                <th class="frequency-col">Частота</th>
+                                <th class="cpm-col">CPM</th>
+                                <th class="reach-col">Охват</th>
+                                <th class="cpt-col">CPT</th>
+                                <th class="ctr-col">CTR</th>
+                                <th class="clicks-col">Клики</th>
+                                <th class="cpc-col">CPC</th>
+                                <th class="views-col">Просмотры</th>
+                                <th class="vtr-col">VTR</th>
+                                <th class="cpv-col">CPV</th>
+                                <th class="conversions-session-col">Конв. в сесс.</th>
+                                <th class="sessions-col">Сессии</th>
+                                <th class="cr-successful-col">CR в успех</th>
+                                <th class="conversions-successful-col">Конв. успех</th>
+                                <th class="cpa-successful-col">CPA успех</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budget-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="step-actions">
+                <button class="btn btn--primary btn--lg" id="complete-step2">
+                    Медиаплан сформирован
+                </button>
+            </div>
+            <div id="budget-warning" class="warning-message hidden">
+                ⚠️ Превышен лимит бюджета 2 000 000 ₽! Уменьшите объемы закупки.
+            </div>
+        </div>
+
+        <!-- Экран результатов -->
+        <div id="results-screen" class="screen">
+            <div class="results-modal">
+                <div class="modal-content">
+                    <div class="success-animation">🎉</div>
+                    <h1>Поздравляем!</h1>
+                    <h2>Медиаплан успешно сформирован!</h2>
+                    <div class="results-summary" id="results-summary"></div>
+                    <div class="efficiency-rating" id="efficiency-rating"></div>
+                    <button class="btn btn--primary btn--lg" id="restart-game">
+                        Сыграть снова
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
-    <div id="step1-screen" class="screen">
-        <h2>Этап 1: Отбор площадок</h2>
-        <span id="attempts-counter">1</span>
-        <div class="mediaplan-table-container">
-            <table id="mediaplan-table">
-                <thead>
-                <tr>
-                    <th>✓</th>
-                    <th>№</th>
-                    <th>Сайт</th>
-                    <th>Возраст</th>
-                    <th>Сегменты и интересы</th>
-                    <th>Формат</th>
-                    <th>Пример размещения</th>
-                    <th>Единица закупки</th>
-                    <th>Максимальная ёмкость</th>
-                    <th>Берём в МП</th>
-                    <th>Стоимость за единицу</th>
-                    <th>Бюджет</th>
-                    <th>Показы</th>
-                    <th>Частота</th>
-                    <th>CPM</th>
-                    <th>Охват</th>
-                    <th>CPT</th>
-                    <th>CTR</th>
-                    <th>Кол-во кликов</th>
-                    <th>CPC</th>
-                    <th>Просмотры</th>
-                    <th>VTR</th>
-                    <th>CPV</th>
-                    <th>Конверсии в сессии</th>
-                    <th>Сессии</th>
-                    <th>CR в успешный заказ</th>
-                    <th>Конверсии в успешный заказ</th>
-                    <th>CPA в успешный заказ</th>
-                </tr>
-                </thead>
-                <tbody id="mediaplan-table-body">
-                </tbody>
-            </table>
-        </div>
-        <span id="selection-count">Выбрано площадок: 0</span>
-        <button id="complete-step1" disabled>Отбор площадок закончен</button>
-        <div id="feedback-section" class="feedback-section hidden">
-            <div id="feedback-results"></div>
-            <button id="continue-to-step2" class="hidden">Перейти к этапу 2</button>
-            <button id="try-again">Попробовать снова</button>
-        </div>
-    </div>
-    <div id="step2-screen" class="screen">
-        <h2>Этап 2: Балансировка бюджета</h2>
-        <div class="budget-table-container">
-            <table id="budget-table">
-                <thead>
-                <tr>
-                    <th>✓</th>
-                    <th>№</th>
-                    <th>Сайт</th>
-                    <th>Возраст</th>
-                    <th>Сегменты и интересы</th>
-                    <th>Формат</th>
-                    <th>Пример размещения</th>
-                    <th>Единица закупки</th>
-                    <th>Максимальная ёмкость</th>
-                    <th>Берём в МП</th>
-                    <th>Стоимость за единицу</th>
-                    <th>Бюджет</th>
-                    <th>Показы</th>
-                    <th>Частота</th>
-                    <th>CPM</th>
-                    <th>Охват</th>
-                    <th>CPT</th>
-                    <th>CTR</th>
-                    <th>Кол-во кликов</th>
-                    <th>CPC</th>
-                    <th>Просмотры</th>
-                    <th>VTR</th>
-                    <th>CPV</th>
-                    <th>Конверсии в сессии</th>
-                    <th>Сессии</th>
-                    <th>CR в успешный заказ</th>
-                    <th>Конверсии в успешный заказ</th>
-                    <th>CPA в успешный заказ</th>
-                </tr>
-                </thead>
-                <tbody id="budget-table-body">
-                </tbody>
-            </table>
-        </div>
-        <button id="complete-step2">Медиаплан сформирован</button>
-        <div id="budget-warning" class="warning-message hidden">
-            Превышен лимит бюджета! Уменьшите объемы закупки.
-        </div>
-    </div>
-    <div id="results-screen" class="screen">
-        <div class="results-summary" id="results-summary"></div>
-        <button id="restart-game">Сыграть снова</button>
-    </div>
-</div>
 <script src="app.js"></script>
 </body>
 </html>
