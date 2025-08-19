@@ -824,7 +824,7 @@ function createBudgetRow(platform) {
         val = Math.max(0, Math.min(platform.max_capacity, val));
         
         platform.current_quantity = val;
-        
+        console.log('input платформы', platform.id, val);
         // Чтобы не давать пользователю писать больше capacity, обновляем поле
         if (e.target.value !== val.toString()) {
             e.target.value = val;
@@ -885,6 +885,7 @@ function updateRowDisplay(platformId) {
 }
 
 function updateBudgetDisplay() {
+    console.log('Обновляю KPI', gameState.budgetData.map(p => p.current_quantity));
     gameState.totalBudget = gameState.budgetData.reduce((sum, platform) => 
         sum + (platform.current_quantity * (platform.cost_per_unit || 0)), 0
     );
