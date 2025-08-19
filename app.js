@@ -17,7 +17,7 @@ let gameState = {
 async function loadGameData() {
     try {
         console.log('Загрузка данных из JSON...');
-        const response = await fetch('https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/e63794a29ecdbb74b1db641af19cbcc2/c5a3fd31-4847-4474-af6a-928ac8a0ed91/8a8e99b0.json');
+        const response = await fetch('/final_full_mediaplan.json');
         
         if (!response.ok) {
             throw new Error('Ошибка загрузки данных');
