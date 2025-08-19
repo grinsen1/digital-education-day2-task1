@@ -111,6 +111,26 @@ function showScreen(screenId) {
     try {
         const screens = document.querySelectorAll('.screen');
         screens.forEach(screen => screen.classList.remove('active'));
+        
+        // ✅ ДОБАВЬТЕ: Очистка всех таблиц при переходе к этапу 2
+        if (screenId === 'step2-screen') {
+            console.log('🧹 Очищаем таблицы этапа 1 при переходе к этапу 2');
+            
+            // Очистить таблицу этапа 1
+            const step1TableBody = document.getElementById('mediaplan-table-body');
+            if (step1TableBody) {
+                step1TableBody.innerHTML = '';
+                console.log('✅ Таблица этапа 1 очищена');
+            }
+            
+            // Убедиться, что все строки с data-platform-id удалены
+            const allPlatformRows = document.querySelectorAll('tr[data-platform-id]');
+            allPlatformRows.forEach(row => {
+                console.log('🗑️ Удаляем старую строку:', row.dataset.platformId);
+                row.remove();
+            });
+        }
+        
         const targetScreen = document.getElementById(screenId);
         if (targetScreen) {
             targetScreen.classList.add('active');
