@@ -442,7 +442,7 @@ function createBudgetRow(platform) {
     row.innerHTML = `
         <td class="checkbox-col sticky-col"><input type="checkbox" checked disabled></td>
         <td class="number-col">${platform.id ?? '-'}</td>
-        <td class="site-col">${platform.site ?? '-'}</td>
+        <td class="site-col">${platform.platform ?? '-'}</td>
         <td class="age-col">${platform.age ?? '-'}</td>
         <td class="segments-col">${platform.segments ?? '-'}</td>
         <td class="format-col">${platform.format ?? '-'}</td>
