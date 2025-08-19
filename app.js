@@ -370,7 +370,7 @@ function initializeStep2() {
 }
 
 function createBudgetTable(platforms) {
-    console.log('Перерисовываем таблицу бюджета!');
+    console.log('🏗️ createBudgetTable вызвана, создаем строки для этапа 2');
     const tableBody = document.getElementById('budget-table-body');
     if (!tableBody) {
         console.error('Тело таблицы бюджета не найдено');
@@ -384,15 +384,40 @@ function createBudgetTable(platforms) {
         return;
     }
     platforms.forEach(platform => {
+        console.log('🔨 Создаем строку для платформы:', platform.id, 'через createBudgetRow');
         const row = createBudgetRow(platform);
+        
+        console.log('➕ Добавляем строку в DOM для платформы:', platform.id);
         tableBody.appendChild(row);
+        
+        // Проверяем, что строка действительно добавилась в DOM
+        const addedRow = document.querySelector(`tr[data-platform-id="${platform.id}"]`);
+        if (addedRow) {
+            console.log('✅ Строка успешно добавлена в DOM для платформы:', platform.id);
+            
+            // Проверяем элементы в DOM
+            const quantityInputInDOM = addedRow.querySelector('.quantity-input');
+            const totalCostInDOM = addedRow.querySelector('.total-cost-col');
+            
+            console.log('🔍 ПРОВЕРКА ЭЛЕМЕНТОВ В DOM:');
+            console.log('   quantity-input в DOM:', quantityInputInDOM ? '✅ есть' : '❌ отсутствует');
+            console.log('   total-cost-col в DOM:', totalCostInDOM ? '✅ есть' : '❌ отсутствует');
+        } else {
+            console.error('❌ Строка НЕ найдена в DOM после добавления для платформы:', platform.id);
+        }
     });
+    
+    console.log('🏁 createBudgetTable завершена');
 }
 
+
 function createBudgetRow(platform) {
-    console.log('Создаём строку бюджета для', platform.id);
+    console.log('🔨 createBudgetRow START для платформы:', platform.id);
+    console.log('🔨 Platform data:', platform);
+    
     const row = document.createElement('tr');
     row.dataset.platformId = platform.id;
+    
     // Только реальные поля + input для выделения
     row.innerHTML = `
         <td class="checkbox-col sticky-col"><input type="checkbox" checked disabled></td>
@@ -437,24 +462,67 @@ function createBudgetRow(platform) {
         <td class="conversions-successful-col">${platform.conversions_successful?.toLocaleString() ?? '-'}</td>
         <td class="cpa-successful-col">${platform.cpa_successful?.toLocaleString() ?? '-'} ₽</td>
     `;
+    
+    console.log('📄 HTML строки после создания:');
+    console.log(row.innerHTML);
+    
+    // Проверяем наличие ключевых элементов СРАЗУ после создания
+    const quantityInput = row.querySelector('.quantity-input');
+    const totalCostCol = row.querySelector('.total-cost-col');
+    const quantityCol = row.querySelector('.quantity-col');
+    
+    console.log('🔍 ПРОВЕРКА ЭЛЕМЕНТОВ В НОВОЙ СТРОКЕ:');
+    console.log('   quantity-col:', quantityCol ? '✅ найден' : '❌ отсутствует');
+    console.log('   quantity-input:', quantityInput ? '✅ найден' : '❌ отсутствует');
+    console.log('   total-cost-col:', totalCostCol ? '✅ найден' : '❌ отсутствует');
+    
+    if (quantityInput) {
+        console.log('📝 Quantity input value:', quantityInput.value);
+        console.log('📝 Quantity input data-platform-id:', quantityInput.dataset.platformId);
+    }
+    
+    if (totalCostCol) {
+        console.log('💰 Total cost содержимое:', totalCostCol.textContent);
+    }
+    
+    // Находим кнопки
     const decreaseBtn = row.querySelector('[data-action="decrease"]');
     const increaseBtn = row.querySelector('[data-action="increase"]');
     const input = row.querySelector('.quantity-input');
 
+    console.log('🔍 ПОИСК КНОПОК И INPUT:');
+    console.log('   decreaseBtn:', decreaseBtn ? '✅ найдена' : '❌ не найдена');
+    console.log('   increaseBtn:', increaseBtn ? '✅ найдена' : '❌ не найдена');
+    console.log('   input:', input ? '✅ найден' : '❌ не найден');
+
+    // Привязываем обработчики
     if (decreaseBtn) {
+        console.log('🔗 Привязываем обработчик decrease для платформы:', platform.id);
         decreaseBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('🔽 Нажата кнопка decrease для платформы:', platform.id);
             changeQuantity(platform.id, -100);
         });
+    } else {
+        console.error('❌ Не удалось привязать обработчик decrease - кнопка не найдена');
     }
+    
     if (increaseBtn) {
+        console.log('🔗 Привязываем обработчик increase для платформы:', platform.id);
         increaseBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('🔼 Нажата кнопка increase для платформы:', platform.id);
             changeQuantity(platform.id, 100);
         });
+    } else {
+        console.error('❌ Не удалось привязать обработчик increase - кнопка не найдена');
     }
+    
     if (input) {
+        console.log('🔗 Привязываем обработчик input для платформы:', platform.id);
         input.addEventListener('input', function(e) {
+            console.log('📝 INPUT CHANGED для платформы:', platform.id, 'новое значение:', e.target.value);
+            
             let val = parseInt(e.target.value);
             if (isNaN(val)) val = 0;
             val = Math.max(0, Math.min(platform.max_capacity ?? 0, val));
@@ -462,12 +530,23 @@ function createBudgetRow(platform) {
             if (e.target.value !== val.toString()) {
                 e.target.value = val;
             }
+            
+            console.log('📊 Обновляем platform.current_quantity на:', val);
+            console.log('🔄 Вызываем updateRowDisplay для платформы:', platform.id);
+            
             updateRowDisplay(platform.id);
             updateBudgetDisplay();
         });
+    } else {
+        console.error('❌ Не удалось привязать обработчик input - поле не найдено');
     }
+    
+    console.log('✅ createBudgetRow END для платформы:', platform.id);
+    console.log('📦 Возвращаем строку с data-platform-id:', row.dataset.platformId);
+    
     return row;
 }
+
 
 function changeQuantity(platformId, delta) {
     const platform = gameState.budgetData.find(p => p.id === platformId);
