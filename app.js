@@ -758,6 +758,19 @@ function createBudgetRow(platform) {
         <td class="placement-col">${platform.placement_example || '-'}</td>
         <td class="unit-col">${platform.purchase_unit || '-'}</td>
         <td class="capacity-col">${platform.max_capacity ? platform.max_capacity.toLocaleString() : '-'}</td>
+         <td class="quantity-col">
+            <div class="quantity-controls">
+                <button class="quantity-btn" data-action="decrease" data-platform-id="${platform.id}">−</button>
+                <input type="number" 
+                       class="quantity-input" 
+                       data-platform-id="${platform.id}" 
+                       value="${platform.current_quantity}" 
+                       min="0" 
+                       max="${platform.max_capacity}" 
+                       step="100">
+                <button class="quantity-btn" data-action="increase" data-platform-id="${platform.id}">+</button>
+            </div>
+        </td>
         <td class="cost-col">${platform.cost_per_unit ? platform.cost_per_unit.toLocaleString() + ' ₽' : '-'}</td>
         <td class="total-cost-col">${(platform.current_quantity * (platform.cost_per_unit || 0)).toLocaleString()} ₽</td>
         <td class="reach-col">${platform.reach ? platform.reach.toLocaleString() : '-'}</td>
@@ -777,19 +790,6 @@ function createBudgetRow(platform) {
         <td class="desktop-col">${platform.desktop_traffic ? (platform.desktop_traffic * 100).toFixed(1) + '%' : '-'}</td>
         <td class="geography-col">${platform.geography || '-'}</td>
         <td class="timing-col">${platform.timing || '-'}</td>
-        <td class="quantity-col">
-            <div class="quantity-controls">
-                <button class="quantity-btn" data-action="decrease" data-platform-id="${platform.id}">−</button>
-                <input type="number" 
-                       class="quantity-input" 
-                       data-platform-id="${platform.id}" 
-                       value="${platform.current_quantity}" 
-                       min="0" 
-                       max="${platform.max_capacity}" 
-                       step="100">
-                <button class="quantity-btn" data-action="increase" data-platform-id="${platform.id}">+</button>
-            </div>
-        </td>
     `;
     
     // Кнопки +/−
