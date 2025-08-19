@@ -719,6 +719,7 @@ function initializeStep2() {
 }
 
 function createBudgetTable(platforms) {
+    console.log('Перерисовываем таблицу бюджета!');
     const tableBody = document.getElementById('budget-table-body');
     if (!tableBody) {
         console.error('Тело таблицы бюджета не найдено');
@@ -741,6 +742,7 @@ function createBudgetTable(platforms) {
 }
 
 function createBudgetRow(platform) {
+    console.log('Создаём строку бюджета для', platform.id);
     const row = document.createElement('tr');
     row.dataset.platformId = platform.id;
     
@@ -798,6 +800,7 @@ function createBudgetRow(platform) {
     if (decreaseBtn) {
         decreaseBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('Кнопка минус нажата для', platform.id);
             changeQuantity(platform.id, -100);
         });
     }
@@ -805,6 +808,7 @@ function createBudgetRow(platform) {
     if (increaseBtn) {
         increaseBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('Кнопка плюс нажата для', platform.id);
             changeQuantity(platform.id, 100);
         });
     }
@@ -843,6 +847,7 @@ function changeQuantity(platformId, delta) {
     document.querySelectorAll('.quantity-input').forEach(input => {
         if (parseInt(input.dataset.platformId) === platformId) {
             input.value = platform.current_quantity;
+            console.log('Инпут найден и обновлён:', input, platform.current_quantity);
         }
     });
 
