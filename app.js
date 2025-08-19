@@ -426,7 +426,7 @@ function initializeStep1() {
         tableBody.innerHTML = '';
         
         // Используем данные из JSON
-        const platforms = gameState.gameData.platforms || [];
+        const platforms = gameState.gameData.step1 || [];
         console.log('Загружено площадок:', platforms.length);
         
         platforms.forEach(platform => {
