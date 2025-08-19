@@ -487,7 +487,7 @@ function updateRowDisplay(platformId) {
     const row = document.querySelector(`tr[data-platform-id="${platformId}"]`);
     if (!platform || !row) return;
     const quantityInput = row.querySelector('.quantity-input');
-    const totalCostDisplay = row.querySelector('.total-cost-col');
+    const totalCostDisplay = row.querySelector('td.total-cost-col');
     const decreaseBtn = row.querySelector('[data-action="decrease"]');
     const increaseBtn = row.querySelector('[data-action="increase"]');
     if (quantityInput) {
