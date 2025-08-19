@@ -829,7 +829,6 @@ function createBudgetRow(platform) {
         updateRowDisplay(platform.id);
         updateBudgetDisplay();
     });
-}
     }
     
     return row;
