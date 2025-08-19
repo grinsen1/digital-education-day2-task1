@@ -837,11 +837,37 @@ function createBudgetRow(platform) {
 function changeQuantity(platformId, delta) {
     const platform = gameState.budgetData.find(p => p.id === platformId);
     if (!platform) return;
-    
+
+    // Пересчет количества — в пределах допустимого диапазона
     const newQuantity = Math.max(0, Math.min(platform.max_capacity, platform.current_quantity + delta));
     platform.current_quantity = newQuantity;
-    
-    updateRowDisplay(platformId);
+
+    // Находим строку и инпут для выбранной площадки
+    const row = document.querySelector(`tr[data-platform-id="${platformId}"]`);
+    if (row) {
+        const quantityInput = row.querySelector('.quantity-input');
+        if (quantityInput) {
+            quantityInput.value = platform.current_quantity;
+        }
+
+        // Настроим дисейбл кнопок (− не работает на 0, + — при max_capacity)
+        const decreaseBtn = row.querySelector('[data-action="decrease"]');
+        if (decreaseBtn) {
+            decreaseBtn.disabled = platform.current_quantity === 0;
+        }
+
+        const increaseBtn = row.querySelector('[data-action="increase"]');
+        if (increaseBtn) {
+            increaseBtn.disabled = platform.current_quantity >= platform.max_capacity;
+        }
+
+        const totalCostDisplay = row.querySelector('.total-cost-col');
+        if (totalCostDisplay) {
+            const totalCost = platform.current_quantity * (platform.cost_per_unit || 0);
+            totalCostDisplay.textContent = totalCost.toLocaleString() + ' ₽';
+        }
+    }
+
     updateBudgetDisplay();
 }
 
