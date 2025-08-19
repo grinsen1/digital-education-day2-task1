@@ -856,6 +856,7 @@ function changeQuantity(platformId, delta) {
 }
 
 function updateRowDisplay(platformId) {
+    console.log('Вызван updateRowDisplay для:', platformId);
     const platform = gameState.budgetData.find(p => p.id === platformId);
     const row = document.querySelector(`tr[data-platform-id="${platformId}"]`);
     
@@ -871,9 +872,10 @@ function updateRowDisplay(platformId) {
     }
     
     if (totalCostDisplay) {
-        const totalCost = platform.current_quantity * (platform.cost_per_unit || 0);
-        totalCostDisplay.textContent = totalCost.toLocaleString() + ' ₽';
-    }
+    const totalCost = platform.current_quantity * (platform.cost_per_unit || 0);
+    console.log('Меняю total-cost для', platformId, 'на', totalCost); // ← вот лог!
+    totalCostDisplay.textContent = totalCost.toLocaleString() + ' ₽';
+}
     
     if (decreaseBtn) {
         decreaseBtn.disabled = platform.current_quantity === 0;
