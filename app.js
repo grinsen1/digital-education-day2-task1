@@ -17,7 +17,7 @@ let gameState = {
 async function loadGameData() {
     try {
         console.log('Загрузка данных из JSON...');
-        const response = await fetch('/final_full_mediaplan.json');
+        const response = await fetch('digital-education-day2-task1/final_full_mediaplan.json');
         
         if (!response.ok) {
             throw new Error('Ошибка загрузки данных');
