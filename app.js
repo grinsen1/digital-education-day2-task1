@@ -778,15 +778,22 @@ function createBudgetRow(platform) {
         <td class="quantity-col">
             <div class="quantity-controls">
                 <button class="quantity-btn" data-action="decrease" data-platform-id="${platform.id}">−</button>
-                <div class="quantity-display">${platform.current_quantity}</div>
+                <input type="number" 
+                       class="quantity-input" 
+                       data-platform-id="${platform.id}" 
+                       value="${platform.current_quantity}" 
+                       min="0" 
+                       max="${platform.max_capacity}" 
+                       step="100">
                 <button class="quantity-btn" data-action="increase" data-platform-id="${platform.id}">+</button>
             </div>
         </td>
     `;
     
-    // Добавляем обработчики для кнопок количества
+    // Кнопки +/−
     const decreaseBtn = row.querySelector('[data-action="decrease"]');
     const increaseBtn = row.querySelector('[data-action="increase"]');
+    const input = row.querySelector('.quantity-input');
     
     if (decreaseBtn) {
         decreaseBtn.addEventListener('click', function(e) {
@@ -800,6 +807,29 @@ function createBudgetRow(platform) {
             e.preventDefault();
             changeQuantity(platform.id, 100);
         });
+    }
+    
+    // Обработка ручного ввода
+    if (input) {
+    input.addEventListener('input', function(e) {
+        let val = parseInt(e.target.value);
+        if (isNaN(val)) {
+            val = 0;
+        }
+        // Ограничиваем в диапазоне [0, max_capacity]
+        val = Math.max(0, Math.min(platform.max_capacity, val));
+        
+        platform.current_quantity = val;
+        
+        // Чтобы не давать пользователю писать больше capacity, обновляем поле
+        if (e.target.value !== val.toString()) {
+            e.target.value = val;
+        }
+        
+        updateRowDisplay(platform.id);
+        updateBudgetDisplay();
+    });
+}
     }
     
     return row;
@@ -822,13 +852,13 @@ function updateRowDisplay(platformId) {
     
     if (!platform || !row) return;
     
-    const quantityDisplay = row.querySelector('.quantity-display');
+    const quantityInput = row.querySelector('.quantity-input');
     const totalCostDisplay = row.querySelector('.total-cost-col');
     const decreaseBtn = row.querySelector('[data-action="decrease"]');
     const increaseBtn = row.querySelector('[data-action="increase"]');
     
-    if (quantityDisplay) {
-        quantityDisplay.textContent = platform.current_quantity.toLocaleString();
+    if (quantityInput) {
+        quantityInput.value = platform.current_quantity;
     }
     
     if (totalCostDisplay) {
