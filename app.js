@@ -554,18 +554,166 @@ function createBudgetRow(platform) {
             console.log('📊 Обновляем platform.current_quantity на:', val);
             console.log('🔄 Вызываем updateRowDisplay для платформы:', platform.id);
             
-            updateRowDisplay(platform.id);
-            updateBudgetDisplay();
-        });
-    } else {
-        console.error('❌ Не удалось привязать обработчик input - поле не найдено');
+            function updateRowDisplay(platformId) {
+    console.log('=== updateRowDisplay START ===');
+    
+    const platform = gameState.budgetData.find(p => p.id === platformId);
+    if (!platform) {
+        console.error('❌ Platform не найден');
+        return;
     }
     
-    console.log('✅ createBudgetRow END для платформы:', platform.id);
-    console.log('📦 Возвращаем строку с data-platform-id:', row.dataset.platformId);
+    // Ищем строку ТОЛЬКО в таблице этапа 2
+    const budgetTableBody = document.getElementById('budget-table-body');
+    if (!budgetTableBody) {
+        console.error('❌ budget-table-body не найдено');
+        return;
+    }
     
-    return row;
+    const row = budgetTableBody.querySelector(`tr[data-platform-id="${platformId}"]`);
+    if (!row) {
+        console.error('❌ Строка не найдена в таблице этапа 2');
+        return;
+    }
+    
+    console.log('✅ Строка найдена, начинаем пересчеты...');
+    
+    // === БАЗОВЫЕ ЗНАЧЕНИЯ ===
+    const currentQuantity = platform.current_quantity ?? 0;
+    const costPerUnit = platform.cost_per_unit ?? 0;
+    const frequency = platform.frequency ?? 1;
+    const ctr = platform.ctr ?? 0;
+    const vtr = platform.vtr ?? 0;
+    const conversionsSession = platform.conversions_session ?? 0;
+    const crSuccessful = platform.cr_successful ?? 0;
+    
+    // === РАСЧЕТЫ ===
+    
+    // 1. Общая стоимость
+    const totalCost = currentQuantity * costPerUnit;
+    
+    // 2. Показы = Берем в МП * 1000
+    const shows = currentQuantity * 1000;
+    
+    // 3. Охват = Показы / Частота
+    const reach = frequency > 0 ? Math.round(shows / frequency) : 0;
+    
+    // 4. Клики = Показы * CTR
+    const clicks = Math.round(shows * ctr);
+    
+    // 5. CPC = Общая стоимость / Клики
+    const cpc = clicks > 0 ? Math.round(totalCost / clicks) : 0;
+    
+    // 6. Просмотры = Показы * VTR
+    const views = Math.round(shows * vtr);
+    
+    // 7. Сессии = Клики * Конв. в сессии
+    const sessions = Math.round(clicks * conversionsSession);
+    
+    // 8. Конв в успех = Клики * CR в успех
+    const conversionsSuccessful = clicks * crSuccessful;
+    
+    // 9. CPA в конв. = Общая стоимость / Конв в успех
+    const cpaSuccessful = conversionsSuccessful > 0 ? Math.round(totalCost / conversionsSuccessful) : 0;
+    
+    console.log('📊 РАСЧЕТЫ:');
+    console.log('  Количество:', currentQuantity);
+    console.log('  Показы:', shows.toLocaleString());
+    console.log('  Охват:', reach.toLocaleString());
+    console.log('  Клики:', clicks.toLocaleString());
+    console.log('  CPC:', cpc.toLocaleString());
+    console.log('  Просмотры:', views.toLocaleString());
+    console.log('  Сессии:', sessions.toLocaleString());
+    console.log('  Конв в успех:', conversionsSuccessful.toFixed(2));
+    console.log('  CPA успешный:', cpaSuccessful.toLocaleString());
+    
+    // === ОБНОВЛЕНИЕ DOM ===
+    
+    // Количество (input)
+    const quantityInput = row.querySelector('.quantity-input');
+    if (quantityInput) {
+        quantityInput.value = currentQuantity;
+    }
+    
+    // Общая стоимость
+    const totalCostDisplay = row.querySelector('.total-cost-col');
+    if (totalCostDisplay) {
+        totalCostDisplay.textContent = totalCost.toLocaleString() + ' ₽';
+        console.log('✅ Общая стоимость обновлена');
+    }
+    
+    // Показы
+    const showsDisplay = row.querySelector('.shows-col');
+    if (showsDisplay) {
+        showsDisplay.textContent = shows.toLocaleString();
+        console.log('✅ Показы обновлены');
+    }
+    
+    // Охват
+    const reachDisplay = row.querySelector('.reach-col');
+    if (reachDisplay) {
+        reachDisplay.textContent = reach.toLocaleString();
+        console.log('✅ Охват обновлен');
+    }
+    
+    // Клики
+    const clicksDisplay = row.querySelector('.clicks-col');
+    if (clicksDisplay) {
+        clicksDisplay.textContent = clicks.toLocaleString();
+        console.log('✅ Клики обновлены');
+    }
+    
+    // CPC
+    const cpcDisplay = row.querySelector('.cpc-col');
+    if (cpcDisplay) {
+        cpcDisplay.textContent = cpc.toLocaleString() + ' ₽';
+        console.log('✅ CPC обновлен');
+    }
+    
+    // Просмотры
+    const viewsDisplay = row.querySelector('.views-col');
+    if (viewsDisplay) {
+        viewsDisplay.textContent = views.toLocaleString();
+        console.log('✅ Просмотры обновлены');
+    }
+    
+    // Сессии
+    const sessionsDisplay = row.querySelector('.sessions-col');
+    if (sessionsDisplay) {
+        sessionsDisplay.textContent = sessions.toLocaleString();
+        console.log('✅ Сессии обновлены');
+    }
+    
+    // Конверсии в успешный заказ
+    const conversionsSuccessfulDisplay = row.querySelector('.conversions-successful-col');
+    if (conversionsSuccessfulDisplay) {
+        conversionsSuccessfulDisplay.textContent = conversionsSuccessful.toFixed(2);
+        console.log('✅ Конверсии в успех обновлены');
+    }
+    
+    // CPA в успешный заказ
+    const cpaSuccessfulDisplay = row.querySelector('.cpa-successful-col');
+    if (cpaSuccessfulDisplay) {
+        cpaSuccessfulDisplay.textContent = cpaSuccessful.toLocaleString() + ' ₽';
+        console.log('✅ CPA успешный обновлен');
+    }
+    
+    // === ОБНОВЛЕНИЕ КНОПОК ===
+    const decreaseBtn = row.querySelector('[data-action="decrease"]');
+    const increaseBtn = row.querySelector('[data-action="increase"]');
+    
+    if (decreaseBtn) {
+        decreaseBtn.disabled = currentQuantity === 0;
+    }
+    
+    if (increaseBtn) {
+        increaseBtn.disabled = currentQuantity >= (platform.max_capacity ?? 0);
+    }
+    
+    console.log('🎉 Все расчеты и обновления завершены!');
+    console.log('=== updateRowDisplay END ===');
 }
+
 
 
 function changeQuantity(platformId, delta) {
