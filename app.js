@@ -745,9 +745,19 @@ function updateBudgetDisplay() {
     gameState.totalConversions = gameState.budgetData.reduce((sum, platform) =>
         sum + ((platform.current_quantity ?? 0) * (platform.cr_successful ?? 0)), 0
     );
-    gameState.totalReach = gameState.budgetData.reduce((sum, platform) =>
-        sum + ((platform.current_quantity ?? 0) > 0 ? (platform.reach ?? 0) : 0), 0
-    );
+const reachSum = gameState.budgetData.reduce((sum, platform) => {
+    const qty = platform.current_quantity ?? 0;         // купленный объём
+    if (qty <= 0) return sum;                           // площадка не активна
+    const shows = qty * 1000;                           // 1 ед. = 1 000 показов
+    const freq  = platform.frequency > 0 ? platform.frequency : 1;
+    const reach = Math.round(shows / freq);             // расчётный охват
+    return sum + reach;
+}, 0);
+
+/* коэффициент 0.7 применяется всегда */
+gameState.totalReach = Math.round(reachSum * 0.7);
+
+  
     const budgetElement = document.getElementById('current-budget');
     if (budgetElement) {
         budgetElement.textContent = gameState.totalBudget.toLocaleString() + ' ₽';
