@@ -842,29 +842,30 @@ function showResults() {
 
 /* ----------  calculateEfficiency()  ---------- */
 /* отдаёт целое число 1–10                       */
-function calculateEfficiency(cpa, budget, budgetLimit) {
-  let score = 0;                                   // старт — 0
+function calculateEfficiency(totalReach, cpa, budget, budgetLimit) {
+  let score = 0;
 
-  /* === 1. Освоение бюджета (0–3 балла) === */
-  const usage = budget / budgetLimit;              // доля лимита
-  if (usage >= 0.99)          score += 3;          // 99–100 %
-  else if (usage >= 0.90)     score += 2;          // 90–98,99 %
-  else if (usage >= 0.80)     score += 1;          // 80–89,99 %
-  // <80 % — 0 баллов
+  /* 1. Освоение бюджета */
+  const usage = budget / budgetLimit;
+  if (usage >= 0.99)          score += 3;
+  else if (usage >= 0.90)     score += 2;
+  else if (usage >= 0.80)     score += 1;
 
-  /* === 2. CPA (–2…+6 баллов) ===
-       Пороги под реальные минимумы (≈24 k ₽)      */
-  if (cpa <= 25000)           score += 6;          // топ-эффективность
-  else if (cpa <= 40000)      score += 4;          // норм
-  else if (cpa <= 60000)      score += 2;          // терпимо
-  else if (cpa > 80000)       score -= 2;          // очень плохо
-  // 60–80 k — 0 баллов
+  /* 2. Охват */
+  if (totalReach >= 2_500_000)       score += 6;
+  else if (totalReach >= 1_500_000)  score += 4;
+  else if (totalReach >=   800_000)  score += 2;
+  else if (totalReach <    500_000)  score -= 1;
 
-  /* === 3. Бонус первой попытки (0/1 балл) === */
+  /* 3. CPA (второстепенный) */
+  if (cpa <= 40_000)         score += 1;
+  else if (cpa > 80_000)     score -= 2;
+
+  /* 4. Первая попытка */
   if (gameState.attempts === 1) score += 1;
 
-  /* === 4. Ограничение диапазона 1–10 === */
-  score = Math.round(score);                       // делаем целым
+  /* Диапазон 1–10 */
+  score = Math.round(score);
   return Math.max(1, Math.min(10, score));
 }
 
