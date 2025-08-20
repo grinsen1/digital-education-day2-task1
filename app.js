@@ -742,9 +742,15 @@ function updateBudgetDisplay() {
     gameState.totalBudget = gameState.budgetData.reduce((sum, platform) =>
         sum + ((platform.current_quantity ?? 0) * (platform.cost_per_unit ?? 0)), 0
     );
-    gameState.totalConversions = gameState.budgetData.reduce((sum, platform) =>
-        sum + ((platform.current_quantity ?? 0) * (platform.cr_successful ?? 0)), 0
-    );
+    gameState.totalConversions = gameState.budgetData.reduce((sum, p) => {
+    const qty = p.current_quantity ?? 0;              // купленные единицы
+    if (qty === 0) return sum;                        // площадка не активна
+    const shows   = qty * 1000;                       // показы
+    const clicks  = shows * (p.ctr ?? 0);             // клики
+    const conv    = clicks * (p.cr_successful ?? 0);  // успешные конверсии
+    return sum + conv;
+}, 0);
+    
 const reachSum = gameState.budgetData.reduce((sum, platform) => {
     const qty = platform.current_quantity ?? 0;         // купленный объём
     if (qty <= 0) return sum;                           // площадка не активна
