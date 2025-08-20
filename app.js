@@ -855,15 +855,15 @@ function calculateEfficiency(totalReach, cpa, budget, budgetLimit) {
   const usage = budget / budgetLimit;
   if (usage >= 0.99) score += 3;
   else if (usage >= 0.90) score += 2;
-  else if (usage >= 0.80) score += 1;
+  else if (usage >= 0.80) score -= 1;
 
   /* 2. Охват (70 % от суммы reach) */
-  if (totalReach > 4_200_000)       score += 4;
-  else if (totalReach >= 3_500_000) score += 2;
+  if (totalReach > 4_800_000)       score += 4;
+  else if (totalReach >= 4_500_000) score += 2;
   // ≤ 3.5 M → 0
 
   /* 3. CPA */
-  if (cpa <= 40_000)         score += 1;
+  if (cpa <= 20_000)         score += 1;
   else if (cpa > 80_000)     score -= 2;
 
   /* 4. Минимальный объём на площадку */
