@@ -180,10 +180,7 @@ function initializeStep1() {
 function createMediaplanRow(platform) {
     const row = document.createElement('tr');
     row.dataset.platformId = platform.id;
-    if (platform.feedback) {
-        row.title = platform.feedback;
-        row.style.cursor = 'help';
-    }
+    
     // Только реальные поля из JSON
     row.innerHTML = `
         <td class="checkbox-col sticky-col">
