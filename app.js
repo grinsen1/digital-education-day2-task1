@@ -853,21 +853,31 @@ function calculateEfficiency(totalReach, cpa, budget, budgetLimit) {
 
   /* 1. Освоение бюджета */
   const usage = budget / budgetLimit;
-  if (usage >= 0.99)          score += 3;
-  else if (usage >= 0.90)     score += 2;
-  else if (usage >= 0.80)     score += 1;
+  if (usage >= 0.99) score += 3;
+  else if (usage >= 0.90) score += 2;
+  else if (usage >= 0.80) score += 1;
 
-  /* 2. Охват */
-  if (totalReach >= 2_500_000)       score += 6;
-  else if (totalReach >= 1_500_000)  score += 4;
-  else if (totalReach >=   800_000)  score += 2;
-  else if (totalReach <    500_000)  score -= 1;
+  /* 2. Охват (70 % от суммы reach) */
+  if (totalReach > 4_200_000)       score += 4;
+  else if (totalReach >= 3_500_000) score += 2;
+  // ≤ 3.5 M → 0
 
-  /* 3. CPA (второстепенный) */
+  /* 3. CPA */
   if (cpa <= 40_000)         score += 1;
   else if (cpa > 80_000)     score -= 2;
 
-  /* 4. Первая попытка */
+  /* 4. Минимальный объём на площадку */
+  const everyActiveHas150k = gameState.budgetData.every(p => {
+      const spend = (p.current_quantity ?? 0) * (p.cost_per_unit ?? 0);
+      return (p.current_quantity ?? 0) === 0 || spend >= 150_000;
+  });
+  if (everyActiveHas150k) score += 1;
+
+  /* 5. Использованы все площадки */
+  const allUsed = gameState.budgetData.every(p => (p.current_quantity ?? 0) > 0);
+  if (allUsed) score += 1;
+
+  /* 6. Первая попытка */
   if (gameState.attempts === 1) score += 1;
 
   /* Диапазон 1–10 */
