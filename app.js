@@ -830,17 +830,32 @@ function showResults() {
     }
 }
 
+/* ----------  calculateEfficiency()  ---------- */
+/* отдаёт целое число 1–10                       */
 function calculateEfficiency(cpa, budget, budgetLimit) {
-    let score = 5;
-    const budgetUsage = budget / budgetLimit;
-    if (budgetUsage > 0.8 && budgetUsage <= 1) score += 2;
-    else if (budgetUsage > 0.6) score += 1;
-    else if (budgetUsage < 0.3) score -= 1;
-    if (cpa < 5000 && cpa > 0) score += 2;
-    else if (cpa < 10000 && cpa > 0) score += 1;
-    else if (cpa > 15000) score -= 2;
-    if (gameState.attempts === 1) score += 1;
-    return Math.max(1, Math.min(10, score));
+  let score = 0;                                   // старт — 0
+
+  /* === 1. Освоение бюджета (0–3 балла) === */
+  const usage = budget / budgetLimit;              // доля лимита
+  if (usage >= 0.99)          score += 3;          // 99–100 %
+  else if (usage >= 0.90)     score += 2;          // 90–98,99 %
+  else if (usage >= 0.80)     score += 1;          // 80–89,99 %
+  // <80 % — 0 баллов
+
+  /* === 2. CPA (–2…+6 баллов) ===
+       Пороги под реальные минимумы (≈24 k ₽)      */
+  if (cpa <= 25000)           score += 6;          // топ-эффективность
+  else if (cpa <= 40000)      score += 4;          // норм
+  else if (cpa <= 60000)      score += 2;          // терпимо
+  else if (cpa > 80000)       score -= 2;          // очень плохо
+  // 60–80 k — 0 баллов
+
+  /* === 3. Бонус первой попытки (0/1 балл) === */
+  if (gameState.attempts === 1) score += 1;
+
+  /* === 4. Ограничение диапазона 1–10 === */
+  score = Math.round(score);                       // делаем целым
+  return Math.max(1, Math.min(10, score));
 }
 
 function getEfficiencyText(score) {
