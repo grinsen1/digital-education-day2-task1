@@ -27,8 +27,8 @@
       "sessions": 12000,
       "cr_successful": 0.0015,
       "conversions_successful": 18.0,
-      "cpa_successful": 70555.55555555556,
-      "feedback": "Таргетинг на не релевантною аудиторию, данная ЦА рассматривает для покупки другую категорию, необходимо изменить таргетинг",
+      "cpa_successful": 70555.55,
+      "feedback": "Таргетинг на нерелевантную аудиторию, данная ЦА рассматривает для покупки другую категорию, необходимо изменить таргетинг",
       "correct": false
     },
     {
@@ -50,15 +50,15 @@
       "cpt": 300.0,
       "ctr": 0.0022,
       "clicks": 11000,
-      "cpc": 45.45454545454545,
+      "cpc": 45.45,
       "views": 1750000,
       "vtr": 0.35,
-      "cpv": 0.2857142857142857,
+      "cpv": 0.28,
       "conversions_session": 0.65,
       "sessions": 7150,
       "cr_successful": 0.0012,
       "conversions_successful": 8.58,
-      "cpa_successful": 58275.058275058276,
+      "cpa_successful": 58275.05,
       "feedback": "Позиция подходит, берем в план",
       "correct": true
     },
@@ -88,8 +88,8 @@
       "conversions_session": 0.7,
       "sessions": 14000,
       "cr_successful": 0.0006,
-      "conversions_successful": 8.399999999999999,
-      "cpa_successful": 47619.047619047626,
+      "conversions_successful": 8.39,
+      "cpa_successful": 47619.04,
       "feedback": "Конверсионный формат (СРС закупка) ввиду чего он не подходит для цели кампании - увеличение охвата",
       "correct": false
     },
@@ -112,15 +112,15 @@
       "cpt": 195.0,
       "ctr": 0.0007,
       "clicks": 3150,
-      "cpc": 92.85714285714286,
+      "cpc": 92.85,
       "views": 0,
       "vtr": 0.0,
       "cpv": 0.0,
       "conversions_session": 0.55,
       "sessions": 1732,
       "cr_successful": 0.0008,
-      "conversions_successful": 1.3860000000000003,
-      "cpa_successful": 211038.961038961,
+      "conversions_successful": 1.38,
+      "cpa_successful": 211038.96,
       "feedback": "Позиция подходит, берем в план",
       "correct": true
     },
@@ -151,7 +151,7 @@
       "sessions": 48000,
       "cr_successful": 0.0007,
       "conversions_successful": 33.6,
-      "cpa_successful": 14285.714285714284,
+      "cpa_successful": 14285.71,
       "feedback": "Позиция подходит, берем в план",
       "correct": true
     },
@@ -181,8 +181,8 @@
       "conversions_session": 0.74,
       "sessions": 4070,
       "cr_successful": 0.0003,
-      "conversions_successful": 1.2209999999999999,
-      "cpa_successful": 405405.40540540544,
+      "conversions_successful": 1.22,
+      "cpa_successful": 405405.40,
       "feedback": "Аудитория сильно сужена, благодаря чему мы теряем большой \nпроцент потенциальной аудитории, в данном случае не требуются подобные ограничения по возрасту и доходу",
       "correct": false
     },
@@ -205,7 +205,7 @@
       "cpt": 1518.0,
       "ctr": 0.0013,
       "clicks": 3900,
-      "cpc": 583.8461538461538,
+      "cpc": 583.84,
       "views": 0,
       "vtr": 0.0,
       "cpv": 0.0,
@@ -213,7 +213,7 @@
       "sessions": 3510,
       "cr_successful": 0.0015,
       "conversions_successful": 5.265,
-      "cpa_successful": 432478.6324786325,
+      "cpa_successful": 432478.63,
       "feedback": "Позиция подходит, берем в план",
       "correct": true
     },
@@ -244,7 +244,7 @@
       "sessions": 50400,
       "cr_successful": 0.001,
       "conversions_successful": 50.4,
-      "cpa_successful": 13968.253968253968,
+      "cpa_successful": 13968.25,
       "feedback": "Позиция подходит, берем в план",
       "correct": true
     },
@@ -276,7 +276,7 @@
       "cr_successful": 0.0,
       "conversions_successful": 0.0,
       "cpa_successful": 0.0,
-      "feedback": "Тестовый формат, статестических данных по нему\nнет - ввиду чего выделять больший % бюджета на него\nневерно так как формат может быть неэффективным",
+      "feedback": "Тестовое размещение, без прогноза эффективности\nбюджет у нас небольшой\nНе берем",
       "correct": false
     }
   ],
@@ -300,15 +300,15 @@
       "cpt": 300.0,
       "ctr": 0.0022,
       "clicks": 11000.0,
-      "cpc": 45.45454545454545,
+      "cpc": 45.45,
       "views": 1750000.0,
       "vtr": 0.35,
-      "cpv": 0.2857142857142857,
+      "cpv": 0.28,
       "conversions_session": 0.65,
       "sessions": 7150.0,
       "cr_successful": 0.0012,
       "conversions_successful": 8.58,
-      "cpa_successful": 58275.058275058276
+      "cpa_successful": 58275.05
     },
     {
       "id": 4,
@@ -329,15 +329,15 @@
       "cpt": 195.0,
       "ctr": 0.0007,
       "clicks": 3150.0,
-      "cpc": 92.85714285714286,
+      "cpc": 92.85,
       "views": 0.0,
       "vtr": 0.0,
       "cpv": 0.0,
       "conversions_session": 0.55,
       "sessions": 1732.5000000000002,
       "cr_successful": 0.0008,
-      "conversions_successful": 1.3860000000000003,
-      "cpa_successful": 211038.961038961
+      "conversions_successful": 1.38,
+      "cpa_successful": 211038.96
     },
     {
       "id": 5,
@@ -366,7 +366,7 @@
       "sessions": 48000.0,
       "cr_successful": 0.0007,
       "conversions_successful": 33.6,
-      "cpa_successful": 14285.714285714284
+      "cpa_successful": 14285.71
     },
     {
       "id": 7,
@@ -386,16 +386,16 @@
       "reach": 131000,
       "cpt": 1518.0,
       "ctr": 0.0013,
-      "clicks": 340.59999999999997,
-      "cpc": 583.8461538461539,
+      "clicks": 340.59,
+      "cpc": 583.84,
       "views": 0.0,
       "vtr": 0.0,
       "cpv": 0.0,
       "conversions_session": 0.9,
-      "sessions": 306.53999999999996,
+      "sessions": 306.53,
       "cr_successful": 0.0015,
-      "conversions_successful": 0.45980999999999994,
-      "cpa_successful": 432478.63247863256
+      "conversions_successful": 0.45,
+      "cpa_successful": 432478.63
     },
     {
       "id": 8,
@@ -423,8 +423,8 @@
       "conversions_session": 0.63,
       "sessions": 37800.0,
       "cr_successful": 0.001,
-      "conversions_successful": 37.800000000000004,
-      "cpa_successful": 13968.253968253966
+      "conversions_successful": 37.80,
+      "cpa_successful": 13968.25
     }
   ],
   "budget_limit": 2000000,
