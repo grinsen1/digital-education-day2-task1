@@ -829,7 +829,7 @@ function showResults() {
         `;
     }
     const efficiencyElement = document.getElementById('efficiency-rating');
-    let efficiency = calculateEfficiency(cpa, gameState.totalBudget, gameState.gameData.budget_limit ?? 2000000);
+    let efficiency = calculateEfficiency(gameState.totalReach, cpa, gameState.totalBudget, gameState.gameData.budget_limit ?? 2000000);
     let efficiencyText = getEfficiencyText(efficiency);
     if (efficiencyElement) {
         efficiencyElement.innerHTML = `
