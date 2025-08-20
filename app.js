@@ -379,7 +379,7 @@ function initializeStep2() {
     // Можно добавить фильтр иначе, если в step2 содержатся только выбранные правильные
     gameState.budgetData = platforms.map(platform => ({
         ...platform,
-        current_quantity: platform.current_quantity ?? platform.take_quantity ?? 0
+        current_quantity: 0
     }));
     createBudgetTable(gameState.budgetData);
     updateBudgetDisplay();
