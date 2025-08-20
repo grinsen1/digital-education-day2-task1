@@ -1095,16 +1095,6 @@ body {
 
 /* === TABLE HOVER EFFECTS === */
 
-.mediaplan-table tr[title], 
-.budget-table tr[title] {
-  cursor: help;
-}
-
-.mediaplan-table tr[title]:hover, 
-.budget-table tr[title]:hover {
-  position: relative;
-}
-
 /* === STEP ACTIONS === */
 
 .step-actions {
